@@ -30,11 +30,11 @@ export const updatePost = createAsyncThunk(
       const response = await axios.put(`${POSTS_URL}/${id}`, initialPost);
       return response.data;
     } catch (err) {
-      return err.message;
+      // return err.message;
+      return initialPost; // for testing
     }
   }
 );
-
 export const deletePost = createAsyncThunk(
   "posts/deletePost",
   async (initialPost) => {
