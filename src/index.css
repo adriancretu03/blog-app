@@ -18,7 +18,8 @@ body {
 
 input,
 textarea,
-button {
+button,
+select {
   font: inherit;
   margin-bottom: 1em;
 }
@@ -53,4 +54,8 @@ p {
 form {
   display: flex;
   flex-direction: column;
+}
+
+.postCredit {
+  font-size: 1rem;
 }
