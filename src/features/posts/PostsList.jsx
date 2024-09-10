@@ -1,20 +1,23 @@
-import { useSelector } from "react-redux";
-import { selectPostsIds, getPostsStatus, getPostsError } from "./postsSlice";
+import { useGetPostsQuery } from "./postsSlice";
 import PostExcerpt from "./PostExcerpt";
 
 const PostsList = () => {
-  const orderedPostsIds = useSelector(selectPostsIds);
-  const postStatus = useSelector(getPostsStatus);
-  const error = useSelector(getPostsError);
+  const {
+    data: posts,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetPostsQuery("getPosts");
 
   let content;
-  if (postStatus === "loading") {
+  if (isLoading) {
     content = <p>"Loading..."</p>;
-  } else if (postStatus === "succeeded") {
-    content = orderedPostsIds.map((postId) => (
+  } else if (isSuccess) {
+    content = posts.ids.map((postId) => (
       <PostExcerpt key={postId} postId={postId}></PostExcerpt>
     ));
-  } else if (postStatus === "failed") {
+  } else if (isError) {
     content = <p>{error}</p>;
   }
 

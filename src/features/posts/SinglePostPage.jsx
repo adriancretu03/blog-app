@@ -1,14 +1,19 @@
 import PostAuthor from "./PostAuthor";
 import TimeAgo from "./TimeAgo";
-import ReactionButtons from "./ReactionButtons";
-import { useSelector } from "react-redux";
-import { selectPostById } from "./postsSlice";
+import { useGetPostsQuery } from "./postsSlice";
 import { Link, useParams } from "react-router-dom";
 
 const SinglePostPage = () => {
   const { postId } = useParams();
 
-  const post = useSelector((state) => selectPostById(state, Number(postId)));
+  const { post, isLoading } = useGetPostsQuery("getPosts", {
+    selectFromResult: ({ data, isLoading }) => ({
+      post: data?.entities[postId],
+      isLoading,
+    }),
+  });
+
+  if (isLoading) return <p>Loading...</p>;
 
   if (!post) {
     return (
@@ -27,7 +32,6 @@ const SinglePostPage = () => {
         <PostAuthor userId={post.userId} />
         <TimeAgo timestamp={post.date} />
       </p>
-      <ReactionButtons post={post} />
     </article>
   );
 };
