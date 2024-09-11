@@ -1,19 +1,23 @@
-import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useGetPostsQuery } from "./postsSlice";
-import { useUpdatePostMutation, useDeletePostMutation } from "./postsSlice";
-import { useGetUsersQuery } from "../users/usersSlice";
+import { useUpdatePostMutation, useGetPostsQuery } from "./postsSlice";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import PostForm from "./PostForm";
 
 const EditPostForm = () => {
   const { postId } = useParams();
   const navigate = useNavigate();
 
   const [updatePost, { isLoading }] = useUpdatePostMutation();
-  const [deletePost] = useDeletePostMutation();
 
   const {
     post,
-    isLoading: isLoadingPosts,
+    isLoading: isPostsLoading,
     isSuccess,
   } = useGetPostsQuery("getPosts", {
     selectFromResult: ({ data, isLoading, isSuccess }) => ({
@@ -23,22 +27,29 @@ const EditPostForm = () => {
     }),
   });
 
-  const { data: users, isSuccess: isSuccessUsers } =
-    useGetUsersQuery("getUsers");
+  const onSubmit = async (data) => {
+    const {
+      postTitle: title,
+      postContent: content,
+      postAuthor: userId,
+      postDescription: description,
+    } = data;
+    try {
+      await updatePost({
+        id: postId,
+        title,
+        body: content,
+        userId,
+        description,
+      }).unwrap();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [userId, setUserId] = useState("");
-
-  useEffect(() => {
-    if (isSuccess) {
-      setTitle(post.title);
-      setContent(post.body);
-      setUserId(post.userId);
+      navigate(`/post/${postId}`);
+    } catch (err) {
+      console.error("Failed to update the post", err);
     }
-  }, [isSuccess, post?.title, post?.body, post?.userId]);
+  };
 
-  if (isLoadingPosts) return <p>Loading...</p>;
+  if (isPostsLoading) return <p>Loading...</p>;
 
   if (!post) {
     return (
@@ -48,90 +59,29 @@ const EditPostForm = () => {
     );
   }
 
-  const onTitleChanged = (e) => setTitle(e.target.value);
-  const onContentChanged = (e) => setContent(e.target.value);
-  const onAuthorChanged = (e) => setUserId(Number(e.target.value));
-
-  const canSave = [title, content, userId].every(Boolean) && !isLoading;
-
-  const onSavePostClicked = async () => {
-    if (canSave) {
-      try {
-        await updatePost({
-          id: post?.id,
-          title,
-          body: content,
-          userId,
-        }).unwrap();
-
-        setTitle("");
-        setContent("");
-        setUserId("");
-        navigate(`/post/${postId}`);
-      } catch (err) {
-        console.error("Failed to save the post", err);
-      }
-    }
-  };
-
-  let usersOptions;
-  if (isSuccessUsers) {
-    usersOptions = users.ids.map((id) => (
-      <option key={id} value={id}>
-        {users.entities[id].name}
-      </option>
-    ));
-  }
-
-  const onDeletePostClicked = async () => {
-    try {
-      await deletePost({ id: post?.id }).unwrap();
-
-      setTitle("");
-      setContent("");
-      setUserId("");
-      navigate("/");
-    } catch (err) {
-      console.error("Failed to delete the post", err);
-    }
-  };
-
   return (
-    <section>
-      <h2>Edit Post</h2>
-      <form>
-        <label htmlFor="postTitle">Post Title:</label>
-        <input
-          type="text"
-          id="postTitle"
-          name="postTitle"
-          value={title}
-          onChange={onTitleChanged}
+    <Card className="max-w-2xl mx-auto flex flex-col justify-center items-center">
+      <CardHeader className="text-center">
+        <CardTitle>
+          <h2>Edit</h2>
+        </CardTitle>
+        <CardDescription>
+          <i>edit your post </i>
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="w-full">
+        <PostForm
+          defaultValues={{
+            postTitle: post.title,
+            postAuthor: post.userId,
+            postDescription: post.description,
+            postContent: post.body,
+          }}
+          onSubmit={onSubmit}
+          isLoading={isLoading}
         />
-        <label htmlFor="postAuthor">Author:</label>
-        <select id="postAuthor" value={userId} onChange={onAuthorChanged}>
-          <option value=""></option>
-          {usersOptions}
-        </select>
-        <label htmlFor="postContent">Content:</label>
-        <textarea
-          id="postContent"
-          name="postContent"
-          value={content}
-          onChange={onContentChanged}
-        />
-        <button type="button" onClick={onSavePostClicked} disabled={!canSave}>
-          Save Post
-        </button>
-        <button
-          className="deleteButton"
-          type="button"
-          onClick={onDeletePostClicked}
-        >
-          Delete Post
-        </button>
-      </form>
-    </section>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate } from "react-router-dom";
-import Layout from "./components/Layout";
+import Layout from "./components/common/Layout";
 import AddPostForm from "./features/posts/AddPostForm";
 import PostsList from "./features/posts/PostsList";
 import SinglePostPage from "./features/posts/SinglePostPage";

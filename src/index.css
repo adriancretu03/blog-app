@@ -1,124 +1,86 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.75rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
 }
 
-html {
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  background-color: white;
-  color: #000;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-body {
-  min-height: 100vh;
-  font-size: 1.5rem;
-}
-
-input,
-textarea,
-button,
-select {
-  font: inherit;
-  margin-bottom: 1em;
-}
-
+main,
 header {
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  background-color: purple;
-  color: whitesmoke;
-  position: sticky;
-  top: 0;
-}
-
-nav {
-  display: flex;
-  justify-content: flex-end;
-}
-
-nav ul {
-  list-style-type: none;
-}
-
-nav ul li {
-  display: inline-block;
-  margin-right: 1rem;
-}
-
-nav a,
-nav a:visited {
-  color: #fff;
-  text-decoration: none;
-}
-
-nav a:hover,
-nav a:focus {
-  text-decoration: underline;
-}
-
-main {
-  max-width: 500px;
-  margin: auto;
-}
-
-section {
-  margin-top: 1em;
-}
-
-article {
-  margin: 0.5em;
-  border: 1px solid #000;
-  border-radius: 10px;
-  padding: 1em;
-}
-
-h1 {
-  font-size: 3.5rem;
-}
-
-h2 {
-  margin-bottom: 1rem;
+  @apply max-w-7xl mx-auto my-12;
 }
 
 p {
-  font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.4;
-  font-size: 1.2rem;
-  margin: 0.5em 0;
+  @apply mt-2;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
+h1 {
+  @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
 }
 
-textarea {
-  height: 200px;
-}
-
-.postCredit {
-  font-size: 1rem;
-}
-
-.postCredit a,
-.postCredit a:visited {
-  margin-right: 0.5rem;
-  color: black;
-}
-
-.postCredit a:hover,
-.postCredit a:focus {
-  color: hsla(0, 0%, 0%, 0.75);
-}
-
-.excerpt {
-  font-style: italic;
-}
-
-.deleteButton {
-  background-color: palevioletred;
-  color: white;
+h2 {
+  @apply scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
 }

@@ -2,6 +2,16 @@ import PostAuthor from "./PostAuthor";
 import TimeAgo from "./TimeAgo";
 import { Link } from "react-router-dom";
 import { useGetPostsQuery } from "./postsSlice";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { buttonVariants } from "@/components/ui/button";
 
 const PostsExcerpt = ({ postId }) => {
   const { post } = useGetPostsQuery("getPosts", {
@@ -11,16 +21,26 @@ const PostsExcerpt = ({ postId }) => {
   });
 
   return (
-    <article>
-      <h2>{post.title}</h2>
-      <p className="excerpt">{post.body.substring(0, 75)}...</p>
-      <p className="postCredit">
-        <Link to={`post/${post.id}`}>View Post</Link>
-        <PostAuthor userId={post.userId} />
-        <TimeAgo timestamp={post.date} />
-      </p>
-    </article>
+    <Card className="flex flex-col justify-between">
+      <CardHeader>
+        <CardDescription className="flex items-center">
+          <PostAuthor userId={post.userId} />
+          <TimeAgo timestamp={post.date} />
+        </CardDescription>
+        <CardTitle className="text-center pt-3">{post.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p>{post.description}</p>
+      </CardContent>
+      <CardFooter>
+        <Link
+          className={buttonVariants({ variant: "outline" })}
+          to={`post/${post.id}`}
+        >
+          View Post
+        </Link>
+      </CardFooter>
+    </Card>
   );
 };
-
 export default PostsExcerpt;
