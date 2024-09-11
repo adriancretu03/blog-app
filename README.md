@@ -70,7 +70,7 @@ To get a local copy up and running, follow these simple steps.
 4. **Start the JSON Server**
 
    ```bash
-   json-server --watch data/db.json --port 5173
+   json-server --watch data/db.json --port 3000
     ```
 
 5. **Start the Vite development server**
