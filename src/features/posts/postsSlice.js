@@ -1,4 +1,4 @@
-import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
+import { createEntityAdapter } from "@reduxjs/toolkit";
 import { sub } from "date-fns";
 import { apiSlice } from "../api/apiSlice";
 
@@ -27,6 +27,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         // Normalizing the post data and setting it into the initial state using the adapter.
         return postsAdapter.setAll(initialState, loadedPosts);
       },
+      // Providing a cache tag for the post list, and individual post IDs for cache invalidation.
       providesTags: (result, error, arg) => [
         { type: "Post", id: "LIST" },
         ...result.ids.map((id) => ({ type: "Post", id })),
@@ -48,16 +49,18 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         return [...result.ids.map((id) => ({ type: "Post", id }))];
       },
     }),
+    // Mutation to add a new post, sending a POST request.
     addNewPost: builder.mutation({
       query: (initialPost) => ({
         url: "/posts",
         method: "POST",
         body: {
-          ...initialPost,
+          ...initialPost, // Sending the new post data in the request body
           userId: Number(initialPost.userId),
           date: new Date().toISOString(),
         },
       }),
+      // Invalidating the cache for the post list to refresh it after adding a new post.
       invalidatesTags: [{ type: "Post", id: "LIST" }],
     }),
     updatePost: builder.mutation({
@@ -84,6 +87,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
+// Exporting the auto-generated hooks for the above queries and mutations
 export const {
   useGetPostsQuery,
   useGetPostsByUserIdQuery,

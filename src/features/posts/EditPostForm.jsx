@@ -20,6 +20,7 @@ const EditPostForm = () => {
     isLoading: isPostsLoading,
     isSuccess,
   } = useGetPostsQuery("getPosts", {
+    // Using `selectFromResult` to extract the specific post from the normalized data.
     selectFromResult: ({ data, isLoading, isSuccess }) => ({
       post: data?.entities[postId],
       isLoading,
@@ -49,6 +50,7 @@ const EditPostForm = () => {
     }
   };
 
+  // Showing a loading message while fetching the post data.
   if (isPostsLoading) return <p>Loading...</p>;
 
   if (!post) {

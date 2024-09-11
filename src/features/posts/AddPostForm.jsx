@@ -20,14 +20,13 @@ const AddPostForm = () => {
       postContent: content,
       postAuthor: userId,
     } = data;
-    console.log(data);
     try {
       await addNewPost({
         title,
         description,
         body: content,
         userId,
-      }).unwrap();
+      }).unwrap(); // `unwrap` to handle possible errors thrown by the mutation.
 
       navigate("/");
     } catch (err) {

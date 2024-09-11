@@ -6,6 +6,7 @@ import SinglePostPage from "./features/posts/SinglePostPage";
 import EditPostForm from "./features/posts/EditPostForm";
 import UsersList from "./features/users/UsersList";
 import UserPage from "./features/users/UserPage";
+import NotFoundPage from "./404";
 
 function App() {
   return (
@@ -29,10 +30,9 @@ function App() {
           <Route index element={<UsersList></UsersList>}></Route>
           <Route path=":userId" element={<UserPage></UserPage>}></Route>
         </Route>
-
-        {/* replace to 404 */}
-        <Route path="*" element={<Navigate to="/" replace></Navigate>}></Route>
       </Route>
+
+      <Route path="*" element={<NotFoundPage />}></Route>
     </Routes>
   );
 }
